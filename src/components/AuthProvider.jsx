@@ -1,16 +1,34 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { AuthContext } from './AuthContext';
-
 import { auth } from './LoginReg';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 
 const AuthProvider = ({ children }) => {
+    const [Users, setUsers] = useState(null)
 
     const createUser = (Email, Password) => {
         return createUserWithEmailAndPassword(auth, Email, Password)
     }
+    const signIn = (email, Password) => {
+        return signInWithEmailAndPassword(auth, email, Password)
+    }
+    useEffect(() => {
+        const Unsubscribe = onAuthStateChanged(auth, user => {
+            if (user) {
+                setUsers(user)
+            }
+            else {
+                console.log("User Signed Out")
+            }
+        })
+        return () => (
+            Unsubscribe()
+        )
+    }, [])
     const User = {
-        createUser
+        Users,
+        createUser,
+        signIn
     }
     return (
         <AuthContext value={User}>

@@ -4,8 +4,8 @@ import "./Navber.css"
 import { AuthContext } from './AuthContext';
 
 const Navber = () => {
-    const Email = use(AuthContext)
-    console.log(Email)
+    const { Users } = use(AuthContext)
+    console.log(Users)
     return (
         <div className="navbar bg-base-100 shadow-sm">
             <div className="navbar-start">
@@ -31,13 +31,19 @@ const Navber = () => {
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1 space-x-3 ">
-                    <li><NavLink to={"/"} >Home</NavLink></li>
-                    <li><NavLink to={"/login"} >Login</NavLink></li>
-                    <li><NavLink to={"/register"} >Register</NavLink></li>
+
+                    {Users ? <>
+                        <li><NavLink to={"/"} >Home</NavLink></li>
+                        <li><NavLink to={"/order"} >Order</NavLink></li>
+
+                    </> : <>
+                        <li><NavLink to={"/login"} >Login</NavLink></li>
+                        <li><NavLink to={"/register"} >Register</NavLink></li>
+                    </>}
                 </ul>
             </div>
             <div className="navbar-end">
-                <a className="btn">Button</a>
+                {Users ? <a className="btn">Sing Out</a> : <li><NavLink to={"/login"} >Login</NavLink></li>}
             </div>
         </div>
     );
