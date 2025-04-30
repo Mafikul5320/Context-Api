@@ -1,11 +1,21 @@
-import React, { use } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { NavLink } from 'react-router';
 import "./Navber.css"
 import { AuthContext } from './AuthContext';
 
 const Navber = () => {
-    const { Users } = use(AuthContext)
+    const { Users, SignOut } = use(AuthContext)
+    const [loginUser, setLoginUSer] = useState(Users)
+    console.log(SignOut)
+    const HandelsignOut = () => {
+        SignOut().then(() => {
+            setLoginUSer(false)
+        }).catch(error => console.log(error.message))
+    }
     console.log(Users)
+    useEffect(() => {
+        setLoginUSer(Users)
+    }, [Users])
     return (
         <div className="navbar bg-base-100 shadow-sm">
             <div className="navbar-start">
@@ -43,7 +53,7 @@ const Navber = () => {
                 </ul>
             </div>
             <div className="navbar-end">
-                {Users ? <a className="btn">Sing Out</a> : <li><NavLink to={"/login"} >Login</NavLink></li>}
+                {loginUser ? <a onClick={HandelsignOut} className="btn">Sing Out</a> : <li><NavLink to={"/login"} >Login</NavLink></li>}
             </div>
         </div>
     );
